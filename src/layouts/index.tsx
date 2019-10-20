@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.css';
+import './index.scss';
 
 const BasicLayout: React.FC = props => {
   return (
@@ -7,7 +7,7 @@ const BasicLayout: React.FC = props => {
     //   <h1 className={styles.title}>Yay! Welcome to umi!</h1>
     //   {props.children}
     // </div>
-    <div>
+    <div className="page">
       {props.children}
     </div>
   );

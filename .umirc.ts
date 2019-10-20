@@ -1,14 +1,17 @@
 import { IConfig } from 'umi-types';
 
 // ref: https://umijs.org/config/
-const config: IConfig =  {
+const config: IConfig = {
   treeShaking: true,
   routes: [
     {
       path: '/',
       component: '../layouts/index',
       routes: [
-        { path: '/', component: '../pages/index' }
+        { path: '/', component: '../pages/index' },
+        {
+          path: '/auth', component: '../pages/auth'
+        }
       ]
     }
   ],
@@ -20,7 +23,7 @@ const config: IConfig =  {
       dynamicImport: false,
       title: 'blog4',
       dll: false,
-      
+
       routes: {
         exclude: [
           /models\//,
@@ -32,6 +35,9 @@ const config: IConfig =  {
       },
     }],
   ],
+  cssLoaderOptions:{
+    localIdentName:'[local]'
+  }
 }
 
 export default config;
