@@ -58,7 +58,7 @@ const LoginPage: React.FC<Props> = props => {
 
   return (
     <div className="auth-page">
-      <div className="auth-page-half">
+      <div className="auth-page-half" tabIndex={-1}>
         <div
           className="auth-page-bg"
           style={{ transform: imgTransform }}
@@ -77,7 +77,7 @@ const LoginPage: React.FC<Props> = props => {
           ))}
         </div>
       </div>
-      <div className="auth-page-half">
+      <div className="auth-page-half" tabIndex={-1}>
         <div
           className="auth-form"
           style={{ transform: formTransform }}
