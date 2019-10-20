@@ -4,7 +4,7 @@ import './index.scss';
 
 interface Props {}
 
-const IMAGE_LIST = ['/img/kokomi/01.png', '/img/kokomi/02.png', '/img/kokomi/03.png'];
+const IMAGE_LIST = ['/img/kokomi/01_low.jpg', '/img/kokomi/02_low.jpg', '/img/kokomi/03_low.jpg'];
 
 const LoginPage: React.FC<Props> = props => {
   const [animationImg, setAnimatinImg] = useState<any>(null);
