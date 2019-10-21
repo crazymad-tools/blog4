@@ -1,10 +1,16 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import Fireworks from '@/pages/common/Fireworks';
+import Coordinate from '@/utils/Coordinate';
 import './index.scss';
 
 interface Props {}
 
-const IMAGE_LIST = ['/img/kokomi/01_low.jpg', '/img/kokomi/02_low.jpg', '/img/kokomi/03_low.jpg'];
+const IMAGE_LIST = ['/img/kokomi/01.jpg', '/img/kokomi/02.jpg', '/img/kokomi/03.jpg'];
+
+let intervalTimer: any = null;
+let timeoutTimer: any = null;
+let lastTime: number = new Date().getTime();
 
 const LoginPage: React.FC<Props> = props => {
   const [animationImg, setAnimatinImg] = useState<any>(null);
@@ -18,15 +24,26 @@ const LoginPage: React.FC<Props> = props => {
   let last: number = new Date().getTime();
 
   useEffect(() => {
-    let timer = setInterval(() => {
-      updateImg();
-    }, 5000);
+    let mscond: number = lastTime + 5000 - new Date().getTime();
+    mscond = mscond < 0 ? 0 : mscond;
+    timeoutTimer = setTimeout(
+      () => {
+        updateImg();
+        intervalTimer = setInterval(() => {
+          updateImg();
+        }, 5000);
+      },
+      mscond < 0 ? 0 : mscond,
+    );
+
     return () => {
-      clearInterval(timer);
+      clearTimeout(timeoutTimer);
+      clearInterval(intervalTimer);
     };
   });
 
   function updateImg() {
+    lastTime = new Date().getTime();
     setAnimatinImg(currentImg);
     setCurrentImg((currentImg + 1) % IMAGE_LIST.length);
   }
@@ -35,15 +52,7 @@ const LoginPage: React.FC<Props> = props => {
     if (new Date().getTime() - last < 100) return;
 
     last = new Date().getTime();
-    let parent = e.currentTarget;
-    let offsetTop = parent.offsetTop;
-    let offsetLeft = parent.offsetLeft;
-    while ((parent = parent.offsetParent)) {
-      offsetTop += parent.offsetTop;
-      offsetLeft += parent.offsetLeft;
-    }
-    let x = (e.clientX - offsetLeft) / e.currentTarget.clientWidth;
-    let y = (e.clientY - offsetTop) / e.currentTarget.clientHeight;
+    let {x, y} = Coordinate.getClickOffset(e);
     if (key === 'img') {
       setImgTransform(`perspective(1000px) rotate3d(${0.5 - y}, 0.1, 0, ${1 + x * 5}deg)`);
     } else if (key === 'form') {
@@ -75,6 +84,7 @@ const LoginPage: React.FC<Props> = props => {
               }`}
             />
           ))}
+          <Fireworks />
         </div>
       </div>
       <div className="auth-page-half" tabIndex={-1}>
