@@ -4,7 +4,10 @@ import Coordinate from '@/utils/Coordinate';
 import Drawer from './Drawer';
 import './index.scss';
 
-interface Props {}
+interface Props {
+    width: any,
+    height: any;
+}
 
 const Fireworks: React.FC<Props> = props => {
 
@@ -12,6 +15,7 @@ const Fireworks: React.FC<Props> = props => {
 
   useEffect(() => {
     let drawer = new Drawer(canvas.current);
+    drawer.start();
   }, []);
 
   function work (e: any) {
@@ -19,7 +23,7 @@ const Fireworks: React.FC<Props> = props => {
   }
 
   return (
-    <canvas className="fireworks" ref={canvas} onClick={work}/>
+    <canvas className="fireworks" ref={canvas} onClick={work} width={props.width} height={props.height} />
   );
 }
 
