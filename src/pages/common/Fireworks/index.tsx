@@ -8,18 +8,18 @@ interface Props {
     width: any,
     height: any;
 }
+let drawer: any = null;
 
 const Fireworks: React.FC<Props> = props => {
-
   const canvas = useRef(null);
 
   useEffect(() => {
-    let drawer = new Drawer(canvas.current);
-    drawer.start();
+    drawer = new Drawer(canvas.current);
   }, []);
 
   function work (e: any) {
     let {x, y} = Coordinate.getClickOffset(e);
+    drawer.start(x, y);
   }
 
   return (

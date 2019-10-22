@@ -5,11 +5,19 @@ import WebglUtils from '@/utils/webgl';
  */
 const vertexText = `
 attribute vec4 a_position;
+attribute vec4 a_color;
+uniform vec3 u_offset;
+varying vec4 v_color;
 
 void main () {
-  gl_PointSize  = 10.0;
+  gl_PointSize  = 2.0;
   // gl_Position = vec4(0.5, 0.5, 1.0, 1.0);
-  gl_Position = a_position;
+  // gl_Position = a_position;
+  float y = u_offset.x * u_offset.x * a_position.x + u_offset.x * a_position.y + u_offset.z;
+  float x = u_offset.x * a_position.z * a_position.w + u_offset.y;
+  gl_Position = vec4(x, y, 1.0, 1.0);
+  // v_color = vec4(a_color.xyz, 0.3 - u_offset.x);
+  v_color = a_color;
 }
 `;
 
@@ -18,18 +26,46 @@ void main () {
  */
 const fragmentText = `
 precision mediump float;
+varying vec4 v_color;
 
 void main () {
-  gl_FragColor = vec4(1, 0, 0.5, 1); 
+  gl_FragColor = v_color; 
 }
 `;
+
+const POINT_COUNT = 50;
+
+class RenderParam {
+  x: number = 0;
+
+  param: number[] = [];
+
+  colors: number[] = [];
+
+  offsetX: number = 0;
+
+  offsetY: number = 0;
+
+  constructor (offsetX: number, offsetY: number) {
+    this.offsetX = (offsetX - 0.5) * 2;
+    this.offsetY = -(offsetY - 0.5) * 2;
+
+    for (let i = 0; i < POINT_COUNT; i++) {
+      this.param.push(-10 * (Math.random()) - 40);
+      this.param.push(10 * (Math.random() - 0.5));
+      this.param.push(Math.random() - 0.5 < 0 ? -1 : 1);
+      this.param.push(Math.random() * 2.0);
+      this.colors.push(Math.random(), Math.random(), Math.random(), 1.0);
+    }
+  }
+}
 
 export default class Drawer {
   private gl: WebGLRenderingContext;
 
   private program: any;
 
-  private positionAttributeLocation: any;
+  private params: RenderParam[] = [];
 
   constructor(canvas: any) {
     this.gl = canvas.getContext('webgl');
@@ -48,14 +84,15 @@ export default class Drawer {
     if (program === null) {
       throw 'create webgl renderer fail';
     }
+
+    window.requestAnimationFrame(() => this._update());
   }
 
   /**
    * start render frame
    **/
-  start() {
-    // TODO reset
-    window.requestAnimationFrame(() => this._update());
+  start(offsetX: number, offsetY: number) {
+    this.params.push(new RenderParam(offsetX, offsetY));
   }
 
   /**
@@ -63,37 +100,62 @@ export default class Drawer {
    */
   private _update() {
     window.requestAnimationFrame(() => this._update());
+    
     let gl = this.gl;
     let canvas: any = this.gl.canvas;
     gl.canvas.width = canvas.clientWidth;
     gl.canvas.height = canvas.clientHeight;
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0.0, 0.7, 0.7, 1);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.useProgram(this.program);
 
-    this.positionAttributeLocation = gl.getAttribLocation(this.program, 'a_position');
-    gl.enableVertexAttribArray(this.positionAttributeLocation);
-    let positionBuffer = gl.createBuffer();
-    let positions = [
-      0, 0,
-      0, 0.5,
-      0.7, 0,
-    ];
-    
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    this.params.forEach((param: RenderParam) => {
+      gl.useProgram(this.program);
+      // x轴参数
+      var xLoc = gl.getUniformLocation(this.program, 'u_offset');
+      gl.uniform3f(xLoc, param.x += 0.004, param.offsetX, param.offsetY);                 // float
 
-    let size = 2;
-    let type = gl.FLOAT;
-    let normalize = false;
-    let stride = 0;
-    let offset = 0;
-    gl.vertexAttribPointer(
-      this.positionAttributeLocation, size, type, normalize, stride, offset
-    );
+      // 二次函数参数
+      let positionAttributeLocation = gl.getAttribLocation(this.program, 'a_position');
+      gl.enableVertexAttribArray(positionAttributeLocation);
+      let positionBuffer = gl.createBuffer();
+      
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(param.param), gl.STATIC_DRAW);
 
-    gl.drawArrays(gl.POINTS, 0, 3);
+      let size = 4;
+      let type = gl.FLOAT;
+      let normalize = false;
+      let stride = 0;
+      let offset = 0;
+      gl.vertexAttribPointer(
+        positionAttributeLocation, size, type, normalize, stride, offset
+      );
+
+      // 颜色参数 
+      let colorLoc = gl.getAttribLocation(this.program, 'a_color');
+      gl.enableVertexAttribArray(colorLoc);
+      let colorBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(param.colors), gl.STATIC_DRAW);
+
+      size = 4;
+      type = gl.FLOAT;
+      normalize = false;
+      stride = 0;
+      offset = 0;
+      gl.vertexAttribPointer(
+        colorLoc, size, type, normalize, stride, offset
+      );
+
+      // 绘制 
+      gl.drawArrays(gl.POINTS, 0, POINT_COUNT);
+
+      if (param.x > 0.3) {
+        let index = this.params.findIndex((item: RenderParam) => param === item);
+        this.params.splice(index, 1);
+      }
+    });
   }
 }
