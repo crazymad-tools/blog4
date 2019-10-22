@@ -66,6 +66,15 @@ const LoginPage: React.FC<Props> = props => {
   }
 
   return (
+    <>
+    <div className="decorate-block" />
+    <div className="decorate-block" />
+    <div className="decorate-block" />
+    <div className="decorate-block" />
+    <div className="decorate-block" />
+    <div className="decorate-block" />
+
+
     <div className="auth-page">
       <div className="auth-page-half" tabIndex={-1}>
         <div
@@ -84,7 +93,7 @@ const LoginPage: React.FC<Props> = props => {
               }`}
             />
           ))}
-          <Fireworks />
+          <Fireworks width="100%" height="100%" />
         </div>
       </div>
       <div className="auth-page-half" tabIndex={-1}>
@@ -109,6 +118,7 @@ const LoginPage: React.FC<Props> = props => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
