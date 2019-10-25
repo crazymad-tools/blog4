@@ -10,13 +10,11 @@ uniform vec3 u_offset;
 varying vec4 v_color;
 
 void main () {
-  gl_PointSize  = 2.0;
-  // gl_Position = vec4(0.5, 0.5, 1.0, 1.0);
-  // gl_Position = a_position;
+  gl_PointSize = 2.0;
+  // y = ax*x + bx
   float y = u_offset.x * u_offset.x * a_position.x + u_offset.x * a_position.y + u_offset.z;
   float x = u_offset.x * a_position.z * a_position.w + u_offset.y;
   gl_Position = vec4(x, y, 1.0, 1.0);
-  // v_color = vec4(a_color.xyz, 0.3 - u_offset.x);
   v_color = a_color;
 }
 `;
@@ -33,7 +31,7 @@ void main () {
 }
 `;
 
-const POINT_COUNT = 50;
+const POINT_COUNT = 100;
 
 class RenderParam {
   x: number = 0;
@@ -51,7 +49,7 @@ class RenderParam {
     this.offsetY = -(offsetY - 0.5) * 2;
 
     for (let i = 0; i < POINT_COUNT; i++) {
-      this.param.push(-10 * (Math.random()) - 40);
+      this.param.push(-20 * (Math.random()) - 30);
       this.param.push(10 * (Math.random() - 0.5));
       this.param.push(Math.random() - 0.5 < 0 ? -1 : 1);
       this.param.push(Math.random() * 2.0);
