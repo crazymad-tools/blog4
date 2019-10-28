@@ -1,0 +1,18 @@
+.code-editor {
+  width: 600px;
+  height: 800px;
+  margin: 0 auto;
+  background: rgb(53, 53, 53);
+  font-size: 14px;
+  color: white;
+  padding: 10px;
+  pre {
+    margin: 0;
+  }
+  textarea {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
