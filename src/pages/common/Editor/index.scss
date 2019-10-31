@@ -2,10 +2,12 @@
   width: 600px;
   height: 800px;
   margin: 0 auto;
-  background: rgb(53, 53, 53);
-  font-size: 14px;
+  background: rgb(54, 57, 68);
+  font-size: 16px;
   color: white;
   padding: 10px;
+  overflow: auto;
+  font-family: Monaco, MonoSpace;
   pre {
     margin: 0;
   }
@@ -14,5 +16,8 @@
     opacity: 0;
     width: 0;
     height: 0;
+  }
+  *::selection  {
+    background: rgba(255, 255, 255, 0.2)
   }
 }
