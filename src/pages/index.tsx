@@ -1,5 +1,5 @@
 import React from 'react';
-import Fireworks from '@/pages/common/Fireworks';
+// import Fireworks from '@/pages/common/Fireworks';
 import Editor from '@/pages/common/Editor';
 
 export default function() {

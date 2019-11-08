@@ -12,6 +12,7 @@ const Editor: React.FC<Props> = props => {
   const [code, setCode] = useState('');
   const [codeHtml, setCodeHtml] = useState('');
   const inputRef = useRef(null);
+  const preRef = useRef(null);
 
   // function input(e: any, index: number) {
   //   let val: string = e.currentTarget.innerText;
@@ -27,21 +28,27 @@ const Editor: React.FC<Props> = props => {
   //   }
   //   setLines(list.concat([]));
   // }
-
+                       
   function input (e: any) {
     setCode(e.currentTarget.value);
     setCodeHtml(codeParse(e.currentTarget.value));
   }
 
   function toFocus () {
-    inputRef.current && inputRef.current.focus();
+    // inputRef.current && inputRef.current.focus();
+    let current: any = inputRef.current;
+    current.focus();
+  }
+
+  function inputOnBlur () {
+    let range = document.createRange();
   }
 
   return (
     <div className="code-editor" onClick={toFocus}>
-      <textarea ref={inputRef} value={code} onInput={input} />
+      <textarea ref={inputRef} value={code} onInput={input} onBlur={inputOnBlur} />
       <code className="tomorrow-comment">
-        <pre dangerouslySetInnerHTML={{__html: codeParse(code)}} />
+        <pre ref={preRef} dangerouslySetInnerHTML={{__html: codeParse(code)}} />
       </code>
     </div>
   );
