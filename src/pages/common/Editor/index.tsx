@@ -34,7 +34,7 @@ const Editor: React.FC<Props> = props => {
   }
 
   function toFocus () {
-    // console.log(inputRef.current.focus());
+    inputRef.current && inputRef.current.focus();
   }
 
   return (
