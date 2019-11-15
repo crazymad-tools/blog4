@@ -11,7 +11,13 @@ const config: IConfig = {
         { path: '/', component: '../pages/index' },
         {
           path: '/auth', component: '../pages/auth'
-        }
+        }, {
+          path: '/articles', component: '../pages/articles' 
+        }, {
+          path: '/system', component: '../pages/system'
+        }, {
+          path: '/game/rpg', component: '../pages/game/rpg'
+        },
       ]
     }
   ],
@@ -35,8 +41,8 @@ const config: IConfig = {
       },
     }],
   ],
-  cssLoaderOptions:{
-    localIdentName:'[local]'
+  cssLoaderOptions: {
+    localIdentName: '[local]'
   }
 }
 

@@ -28,28 +28,42 @@ const Editor: React.FC<Props> = props => {
   //   }
   //   setLines(list.concat([]));
   // }
-                       
-  function input (e: any) {
+
+  function input(e: any) {
     setCode(e.currentTarget.value);
     setCodeHtml(codeParse(e.currentTarget.value));
   }
 
-  function toFocus () {
+  function toFocus() {
     let current: any = inputRef.current;
     current.focus();
   }
 
-  function inputOnBlur () {
-    let range = document.createRange();
+  function inputOnBlur() {
+    // let range: Range = document.createRange();
+    // range.startContainer = null;
+    // range.endContainer = null;
+    // range.startOffset = null;
+    // range.endOffset = null;
+  }
+
+  function onSelect(e: any) {
+    // console.log(e);
   }
 
   return (
-    <div className="code-editor" onClick={toFocus}>
-      <textarea ref={inputRef} value={code} onInput={input} onBlur={inputOnBlur} />
-      <code className="tomorrow-comment">
-        <pre ref={preRef} dangerouslySetInnerHTML={{__html: codeParse(code)}} />
-      </code>
-    </div>
+    <>
+      <div onSelect={onSelect}>
+        <span>dadada</span>
+        <span>大大大</span>
+      </div>
+      <div className="code-editor" onClick={toFocus} onSelect={onSelect}>
+        <textarea ref={inputRef} onInput={input} onBlur={inputOnBlur} />
+        <code className="tomorrow-comment">
+          <pre ref={preRef} dangerouslySetInnerHTML={{ __html: codeParse(code) }} />
+        </code>
+      </div>
+    </>
   );
 };
 

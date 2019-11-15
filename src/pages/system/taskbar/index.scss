@@ -1,0 +1,25 @@
+.taskbar-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 40px;
+  width: 100%;
+  background: rgb(4, 30, 39);
+  .taskbar-btn {
+    background: transparent;
+    height: 100%;
+    width: 40px;
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    &.active {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+  #startBtn {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
