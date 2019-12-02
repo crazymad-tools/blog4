@@ -34,7 +34,8 @@ const Editor: React.FC<Props> = props => {
     setCodeHtml(codeParse(e.currentTarget.value));
   }
 
-  function toFocus() {
+  function toFocus () {
+    // inputRef.current && inputRef.current.focus();
     let current: any = inputRef.current;
     current.focus();
   }
