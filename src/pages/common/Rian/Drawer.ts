@@ -7,15 +7,15 @@ const vertexText = `
 attribute vec4 a_position;
 attribute vec4 a_color;
 uniform vec3 u_offset;
-varying vec4 v_color;
 
 void main () {
-  gl_PointSize = 2.0;
-  // y = ax*x + bx
-  float y = u_offset.x * u_offset.x * a_position.x + u_offset.x * a_position.y + u_offset.z;
-  float x = u_offset.x * a_position.z * a_position.w + u_offset.y;
-  gl_Position = vec4(x, y, 1.0, 1.0);
-  v_color = a_color;
+  // gl_PointSize = 2.0;
+  // // y = ax*x + bx
+  // float y = u_offset.x * u_offset.x * a_position.x + u_offset.x * a_position.y + u_offset.z;
+  // float x = u_offset.x * a_position.z * a_position.w + u_offset.y;
+  // gl_Position = vec4(x, y, 1.0, 1.0);
+  // v_color = a_color;
+  gl_Position = a_position;
 }
 `;
 
@@ -24,7 +24,6 @@ void main () {
  */
 const fragmentText = `
 precision mediump float;
-varying vec4 v_color;
 
 void main () {
   gl_FragColor = v_color; 
@@ -87,13 +86,6 @@ export default class Drawer {
   }
 
   /**
-   * start render frame
-   **/
-  start(offsetX: number, offsetY: number) {
-    this.params.push(new RenderParam(offsetX, offsetY));
-  }
-
-  /**
    * render frame
    */
   private _update() {
@@ -107,7 +99,7 @@ export default class Drawer {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    
+
     this.params.forEach((param: RenderParam) => {
       gl.useProgram(this.program);
       // x轴参数
